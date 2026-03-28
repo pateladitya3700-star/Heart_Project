@@ -1,0 +1,6 @@
+streamlit
+numpy
+tensorflow
+wfdb
+pandas
+matplotlib

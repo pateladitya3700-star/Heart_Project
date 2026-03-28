@@ -25,6 +25,28 @@ The repository includes comprehensive performance metrics located in the root di
 
 ## Technical Dependencies
 *   **Language:** Python 3.x
-*   **Framework:** TensorFlow / Keras
+*   **Framework:** TensorFlow / Keras, Streamlit
 *   **Data Manipulation:** Pandas, NumPy
 *   **Visualization:** Matplotlib / Seaborn
+*   **Signal Processing:** WFDB
+
+## Setup Instructions
+
+### 1. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Run the Application
+```bash
+streamlit run app.py
+```
+
+The app will automatically open in your browser at `http://localhost:8501`
+
+## Usage
+The application provides four main sections:
+- **Home**: Overview of the system
+- **Single Prediction**: Upload individual patient ECG records (.zip with .hea + .dat files)
+- **Bulk Prediction**: Process multiple patient records at once
+- **Performance**: View model performance metrics and confusion matrices

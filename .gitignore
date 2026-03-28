@@ -1,6 +1,34 @@
+# Model files
 Five_Class_Model.h5
+
+# Data files
 archive.zip
 archive/
+*.zip
+
+# Temporary directories
 temp_batch/
 temp_gen_assets/
 temp_single/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
