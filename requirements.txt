@@ -1,6 +1,6 @@
-streamlit==1.32.0
-numpy==1.26.4
-tensorflow==2.16.1
-wfdb==4.1.2
-pandas==2.2.1
-matplotlib==3.8.3
+streamlit
+numpy
+tensorflow
+wfdb
+pandas
+matplotlib
