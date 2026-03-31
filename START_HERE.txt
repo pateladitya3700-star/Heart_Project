@@ -1,0 +1,40 @@
+========================================
+HOW TO RUN YOUR APP
+========================================
+
+OPTION 1 - Double Click (Easiest):
+-----------------------------------
+Just double-click: run_app.bat
+
+
+OPTION 2 - Command Line:
+-----------------------------------
+Open PowerShell in this folder and run:
+.\venv\Scripts\python.exe -m streamlit run app.py
+
+
+IMPORTANT NOTES:
+-----------------------------------
+- Always use the virtual environment (venv folder)
+- The app will open automatically in your browser
+- Default URL: http://localhost:8501 (or 8502, 8503 if port is busy)
+- Press Ctrl+C in the terminal to stop the app
+
+
+TROUBLESHOOTING:
+-----------------------------------
+If you see "TensorFlow not found" error:
+1. Make sure you're using the venv
+2. Run: .\venv\Scripts\python.exe -m pip install tensorflow
+
+If port is already in use:
+- The app will automatically use the next available port
+- Check the terminal output for the correct URL
+
+
+FEATURES:
+-----------------------------------
+- Home: Overview of the system
+- Single Prediction: Upload one patient ECG file
+- Bulk Prediction: Process multiple patients at once
+- Performance: View model accuracy metrics

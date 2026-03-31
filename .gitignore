@@ -1,15 +1,22 @@
 # Model files
 Five_Class_Model.h5
+five_classes.npy
 
 # Data files
 archive.zip
 archive/
 *.zip
+*.csv
+*.npy
 
 # Temporary directories
 temp_batch/
 temp_gen_assets/
 temp_single/
+
+# Project files to exclude
+Final Year Project Phase I/
+generate_assets.py
 
 # Python
 __pycache__/

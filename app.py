@@ -337,8 +337,8 @@ elif st.session_state.page == "Single Prediction":
 
                         c2.metric("AI Confidence", f"{conf*100:.1f}%")
 
-                        # Class Probabilities
-                        st.subheader("Class Probabilities")
+                        # Class Probabilities with Ranking
+                        st.subheader("Class Probabilities Ranking")
 
                         df = pd.DataFrame({
                             "Class": CLASS_NAMES,
@@ -348,7 +348,10 @@ elif st.session_state.page == "Single Prediction":
                         df = df.sort_values(
                             "Probability",
                             ascending=False
-                        )
+                        ).reset_index(drop=True)
+                        
+                        # Add ranking column
+                        df.insert(0, "Rank", range(1, len(df) + 1))
 
                         st.dataframe(
                             df.style.format(
@@ -362,13 +365,19 @@ elif st.session_state.page == "Single Prediction":
 
                         fig, ax = plt.subplots(figsize=(10,3))
 
-                        ax.plot(sig[0, :800, 0], linewidth=1)
+                        ax.plot(sig[0, :800, 0], linewidth=1, color='#3b82f6')
 
-                        ax.set_xlabel("Time")
+                        ax.set_xlabel("Time", color='white')
 
-                        ax.set_ylabel("Amplitude")
+                        ax.set_ylabel("Amplitude", color='white')
 
                         ax.grid(True, linestyle="--", alpha=0.3)
+                        
+                        ax.tick_params(colors='white')
+                        ax.spines['bottom'].set_color('white')
+                        ax.spines['left'].set_color('white')
+                        ax.spines['top'].set_color('white')
+                        ax.spines['right'].set_color('white')
 
                         st.pyplot(fig)
 # -----------------------------------
@@ -432,12 +441,20 @@ elif st.session_state.page == "Bulk Prediction":
                         "Sex": "Female" if sex else "Male",
                         "Diagnosis": dx,
                         "Risk Level": risk,
-                        "Confidence": f"{conf*100:.1f}%"
+                        "Confidence": conf,
+                        "Confidence %": f"{conf*100:.1f}%"
                     })
 
                 bar.progress((i+1)/len(heas))
 
             df = pd.DataFrame(results)
+            
+            # Sort by confidence and add rank
+            df = df.sort_values("Confidence", ascending=False).reset_index(drop=True)
+            df.insert(0, "Rank", range(1, len(df) + 1))
+            
+            # Remove the raw confidence column, keep only the formatted one
+            df = df.drop("Confidence", axis=1)
 
             # STORE RESULTS IN SESSION STATE
             st.session_state["batch_df"] = df
@@ -455,39 +472,79 @@ elif st.session_state.page == "Bulk Prediction":
 
         st.subheader("Batch Summary")
 
+        # Summary Statistics Cards
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            st.metric("Total Patients", len(df), delta=None)
+        with col2:
+            st.metric("High Risk", len(high), delta=None, delta_color="inverse")
+        with col3:
+            st.metric("Moderate Risk", len(moderate), delta=None)
+        with col4:
+            st.metric("Low Risk", len(low), delta=None, delta_color="normal")
+
+        # Filter Buttons
+        st.subheader("Filter Results")
+        
         c1, c2, c3, c4 = st.columns(4)
 
-        if c1.button(f"Total ({len(df)})"):
+        if c1.button(f"All ({len(df)})"):
             st.session_state["filter"] = "ALL"
 
-        if c2.button(f"High ({len(high)})"):
+        if c2.button(f"High Risk ({len(high)})"):
             st.session_state["filter"] = "HIGH"
 
-        if c3.button(f"Moderate ({len(moderate)})"):
+        if c3.button(f"Moderate Risk ({len(moderate)})"):
             st.session_state["filter"] = "MODERATE"
 
-        if c4.button(f"Low ({len(low)})"):
+        if c4.button(f"Low Risk ({len(low)})"):
             st.session_state["filter"] = "LOW"
+
+        # Search Box
+        search_term = st.text_input("Search by Patient ID", "")
 
         choice = st.session_state.get("filter", "ALL")
 
+        # Apply filters
         if choice == "HIGH":
-            st.dataframe(high, use_container_width=True)
-
+            filtered_df = high
         elif choice == "MODERATE":
-            st.dataframe(moderate, use_container_width=True)
-
+            filtered_df = moderate
         elif choice == "LOW":
-            st.dataframe(low, use_container_width=True)
-
+            filtered_df = low
         else:
-            st.dataframe(df, use_container_width=True)
+            filtered_df = df
 
-        st.download_button(
-            "Download CSV",
-            df.to_csv(index=False).encode(),
-            "Cardio_Batch_Report.csv"
+        # Apply search
+        if search_term:
+            filtered_df = filtered_df[filtered_df["Patient ID"].str.contains(search_term, case=False)]
+
+        # Color-code the dataframe based on risk level
+        def highlight_risk(row):
+            if "HIGH" in row["Risk Level"]:
+                return ['background-color: rgba(239, 68, 68, 0.3)'] * len(row)
+            elif "MODERATE" in row["Risk Level"]:
+                return ['background-color: rgba(245, 158, 11, 0.3)'] * len(row)
+            elif "LOW" in row["Risk Level"]:
+                return ['background-color: rgba(34, 197, 94, 0.3)'] * len(row)
+            return [''] * len(row)
+
+        st.dataframe(
+            filtered_df.style.apply(highlight_risk, axis=1),
+            use_container_width=True,
+            height=400
         )
+
+        # Download Section
+        col_dl1, col_dl2 = st.columns([1, 3])
+        with col_dl1:
+            st.download_button(
+                "Download CSV",
+                df.to_csv(index=False).encode(),
+                "Cardio_Batch_Report.csv",
+                mime="text/csv"
+            )
 
 # -----------------------------------
 # PERFORMANCE
