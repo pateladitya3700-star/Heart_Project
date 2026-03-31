@@ -1,6 +1,6 @@
 streamlit
 numpy
-tensorflow
+tensorflow>=2.15.0
 wfdb
 pandas
 matplotlib

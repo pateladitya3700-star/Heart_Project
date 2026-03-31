@@ -1,4 +1,9 @@
 @echo off
 echo Starting Cardiovascular Diagnostic System...
 echo.
+echo Activating virtual environment...
+call venv\Scripts\activate.bat
+echo.
+echo Starting Streamlit app...
 streamlit run app.py
+pause
