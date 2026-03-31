@@ -1,12 +1,9 @@
 # 🫀 Cardiovascular Disease Prediction System
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://your-app-url-here.streamlit.app)
 [![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/)
 [![TensorFlow](https://img.shields.io/badge/TensorFlow-2.21-orange.svg)](https://www.tensorflow.org/)
 
-> **🚀 [LIVE DEMO - Click Here to Try the App!](https://your-app-url-here.streamlit.app)**
-
-A deep learning-powered web application for predicting cardiovascular diseases using ECG signals. Built with TensorFlow and Streamlit.
+A deep learning-powered desktop application for predicting cardiovascular diseases using ECG signals. Built with TensorFlow and Streamlit.
 
 ---
 
